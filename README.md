@@ -1,1 +1,1 @@
-# Projeto_GameList
+# Projeto_GameList - Intensivo Java Spring DevSuperior
