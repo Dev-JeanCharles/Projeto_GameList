@@ -3,7 +3,6 @@ package com.devsuperior.dslist.dto;
 import com.devsuperior.dslist.Entities.Game;
 import lombok.*;
 
-@Data
 @NoArgsConstructor
 @Getter
 public class GameDTO {
