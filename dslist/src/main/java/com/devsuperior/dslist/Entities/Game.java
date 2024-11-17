@@ -6,6 +6,7 @@ import lombok.*;
 @Entity
 @Table(name = "tb_game")
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
