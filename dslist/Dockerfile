@@ -11,4 +11,4 @@ COPY target/dslist-0.0.1-SNAPSHOT.jar /app/dslist.jar
 EXPOSE 8080
 
 # Comando para rodar a aplicação
-ENTRYPOINT ["java", "-jar", "/app/myapp.jar"]
+ENTRYPOINT ["java", "-jar", "/app/dslist.jar"]
