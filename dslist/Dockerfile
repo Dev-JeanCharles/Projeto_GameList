@@ -10,7 +10,7 @@ RUN apt-get update && \
 RUN mvn -version
 
 # Copiar os arquivos do projeto para o contêiner
-COPY ./dslist /app
+COPY ../dslist /app
 
 # Defina o diretório de trabalho
 WORKDIR /app
