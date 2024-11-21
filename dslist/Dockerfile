@@ -18,7 +18,7 @@ COPY src /app/src
 
 # Execute o build com Maven (omitindo testes)
 RUN chmod -R 777 /app
-RUN mvn clean install -DskipTests
+RUN mvn clean install
 
 RUN ls -l /app/target
 
