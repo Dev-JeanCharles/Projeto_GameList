@@ -1,14 +1,34 @@
-# Etapa 1: Definir a imagem base
-FROM openjdk:21-jdk-slim as build
+# Etapa de build usando uma imagem do Ubuntu
+FROM ubuntu:latest AS build
 
-# Definir o diretório de trabalho
+# Atualize o sistema, instale o OpenJDK 17, wget e unzip
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jdk wget unzip
+
+# Instalar o Maven
+RUN sudo apt-get update \
+    sudo apt-get -y install maven
+
+# Verificar instalação do Maven
+RUN mvn -version
+
+# Copiar os arquivos do projeto para o contêiner (garanta que os arquivos Gradle sejam copiados)
+COPY ./dslist /app
+
+# Defina o diretório de trabalho
 WORKDIR /app
 
-# Copiar o arquivo JAR para dentro do container
-COPY target/dslist-0.0.1-SNAPSHOT.jar /app/dslist.jar
+# Execute o build com Gradle (omitindo testes)
+RUN mvn clean install -DskipTests
 
-# Expôr a porta que o Spring Boot irá rodar
+# Etapa de execução usando a imagem slim do OpenJDK
+FROM openjdk:17-jdk-slim
+
+# Exponha a porta da aplicação
 EXPOSE 8080
 
-# Comando para rodar a aplicação
-ENTRYPOINT ["java", "-jar", "/app/dslist.jar"]
+# Copiar o JAR gerado pela etapa de build
+COPY --from=build /app/build/libs/*.jar app.jar
+
+# Defina o comando para iniciar a aplicação
+ENTRYPOINT ["java", "-jar", "app.jar"]
