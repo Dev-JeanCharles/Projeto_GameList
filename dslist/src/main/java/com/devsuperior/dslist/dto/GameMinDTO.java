@@ -1,6 +1,6 @@
 package com.devsuperior.dslist.dto;
 
-import com.devsuperior.dslist.Entities.Game;
+import com.devsuperior.dslist.entities.Game;
 import com.devsuperior.dslist.projections.GameMinProjection;
 import lombok.*;
 

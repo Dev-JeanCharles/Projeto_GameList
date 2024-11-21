@@ -1,6 +1,6 @@
 package com.devsuperior.dslist.services;
 
-import com.devsuperior.dslist.Entities.GameList;
+import com.devsuperior.dslist.entities.GameList;
 import com.devsuperior.dslist.dto.GameListDTO;
 import com.devsuperior.dslist.projections.GameMinProjection;
 import com.devsuperior.dslist.repositories.GameListRepository;
