@@ -10,6 +10,7 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
+@Builder
 public class GameList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
