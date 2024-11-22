@@ -18,6 +18,6 @@ public class BelongingTK {
     private Game game;
 
     @ManyToOne
-    @JoinColumn(name = "list_id")
-    private GameList list;
+    @JoinColumn(name = "category_id")
+    private GameCategory gameCategory;
 }

@@ -1,11 +1,11 @@
 package com.devsuperior.dslist.utils;
 
 
-import com.devsuperior.dslist.entities.GameList;
+import com.devsuperior.dslist.entities.GameCategory;
 
 public class GameListCreator {
-    public static GameList createValidGame() {
-        return GameList.builder()
+    public static GameCategory createValidGame() {
+        return GameCategory.builder()
                 .id(1L)
                 .name("Game 1")
                 .build();

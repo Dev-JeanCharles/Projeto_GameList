@@ -1,9 +1,9 @@
 package com.devsuperior.dslist.services;
 
-import com.devsuperior.dslist.dto.GameListDTO;
-import com.devsuperior.dslist.entities.GameList;
+import com.devsuperior.dslist.dto.GameCategoryDTO;
+import com.devsuperior.dslist.entities.GameCategory;
 import com.devsuperior.dslist.utils.GameListCreator;
-import com.devsuperior.dslist.repositories.GameListRepository;
+import com.devsuperior.dslist.repositories.GameCategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,31 +19,31 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests of services")
-class GameListServiceTest {
+class GameCategoryServiceTest {
 
     @Mock
-    private GameListRepository gameListRepository;
+    private GameCategoryRepository gameCategoryRepository;
 
     @InjectMocks
-    private GameListService gameListService;
+    private GameCategoryService gameCategoryService;
 
     @BeforeEach
     void setUp() {
-        GameList mockGame = GameListCreator.createValidGame();
-        List<GameList> mockGameList = List.of(mockGame);
+        GameCategory mockGame = GameListCreator.createValidGame();
+        List<GameCategory> mockGameCategory = List.of(mockGame);
 
-        when(gameListRepository.findAll()).thenReturn(mockGameList);
+        when(gameCategoryRepository.findAll()).thenReturn(mockGameCategory);
     }
 
     @Test
     @DisplayName("Deve retornar uma lista de GameListDTO quando o repositório retornar uma lista de GameList")
     void deveReturnarListaDeGameDTOQuandoRepositorioRetornarUmGameList() {
-        List<GameListDTO> result = gameListService.findAll();
+        List<GameCategoryDTO> result = gameCategoryService.findAll();
 
         assertEquals(1, result.size());
         assertEquals("Game 1", result.get(0).getName());
         assertEquals(1L, result.get(0).getId());
 
-        verify(gameListRepository, times(1)).findAll();
+        verify(gameCategoryRepository, times(1)).findAll();
     }
 }
