@@ -1,21 +1,22 @@
 package com.devsuperior.dslist.dto;
 
 import com.devsuperior.dslist.entities.GameCategory;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
 public class GameCategoryDTO {
+
     @EqualsAndHashCode.Include
     private Long id;
-
     private String name;
 
     public GameCategoryDTO(GameCategory entity) {
-        id = entity.getId();
-        name = entity.getName();
+        this.id = entity.getId();
+        this.name = entity.getName();
     }
 }

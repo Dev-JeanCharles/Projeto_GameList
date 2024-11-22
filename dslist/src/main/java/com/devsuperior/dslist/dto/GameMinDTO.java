@@ -15,18 +15,18 @@ public class GameMinDTO {
     private String shortDescription;
 
     public GameMinDTO(Game entity) {
-        id = entity.getId();
-        title = entity.getTitle();
-        year = entity.getYear();
-        imgUrl = entity.getImgUrl();
-        shortDescription = entity.getShortDescription();
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.year = entity.getYear();
+        this.imgUrl = entity.getImgUrl();
+        this.shortDescription = entity.getShortDescription();
     }
 
     public GameMinDTO(GameMinProjection projection) {
-        id = projection.getId();
-        title = projection.getTitle();
-        year = projection.getGameYear();
-        imgUrl = projection.getImgUrl();
-        shortDescription = projection.getShortDescription();
+        this.id = projection.getId();
+        this.title = projection.getTitle();
+        this.year = projection.getGameYear();
+        this.imgUrl = projection.getImgUrl();
+        this.shortDescription = projection.getShortDescription();
     }
 }

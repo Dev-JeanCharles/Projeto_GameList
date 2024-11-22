@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GameCategoryService {
@@ -20,10 +21,14 @@ public class GameCategoryService {
     @Autowired
     private GameRepository gameRepository;
 
+    private GameCategoryDTO convertToDTO(GameCategory entity) {
+        return new GameCategoryDTO(entity);
+    }
+
     @Transactional(readOnly = true)
     public List<GameCategoryDTO> findAll() {
         List<GameCategory> result = gameCategoryRepository.findAll();
-        return result.stream().map(GameCategoryDTO::new).toList();
+        return result.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @Transactional
