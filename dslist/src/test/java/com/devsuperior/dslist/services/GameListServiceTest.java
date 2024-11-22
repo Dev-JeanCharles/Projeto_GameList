@@ -2,7 +2,7 @@ package com.devsuperior.dslist.services;
 
 import com.devsuperior.dslist.dto.GameListDTO;
 import com.devsuperior.dslist.entities.GameList;
-import com.devsuperior.dslist.mocks.GameListMock;
+import com.devsuperior.dslist.utils.GameListCreator;
 import com.devsuperior.dslist.repositories.GameListRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,7 @@ class GameListServiceTest {
 
     @BeforeEach
     void setUp() {
-        GameList mockGame = GameListMock.createValidGame();
+        GameList mockGame = GameListCreator.createValidGame();
         List<GameList> mockGameList = List.of(mockGame);
 
         when(gameListRepository.findAll()).thenReturn(mockGameList);
