@@ -43,11 +43,9 @@ public class GameCategoryController {
 
     @PostMapping(value = "/{categoryId}/replacement")
     public void move(@PathVariable Long categoryId, @RequestBody ReplacementDTO body) {
-        log.info("[MOVE]-[Controller] Starting operation move Game in Category 1 or 2: {}, [{}]", categoryId, body);
+        log.info("[MOVE]-[Controller] Starting operation move Game in Category 1 or 2: {}", categoryId);
 
         Command moveCommand = new MoveCategoryCommand(gameCategoryService, categoryId, body.getSourceIndex(), body.getDestinationIndex());
         moveCommand.execute();
-        log.info("[MOVE]-[Controller] Execution Command to move Game: [{}]", moveCommand);
-
     }
 }

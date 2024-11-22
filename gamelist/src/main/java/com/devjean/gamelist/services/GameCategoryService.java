@@ -35,26 +35,22 @@ public class GameCategoryService {
         log.info("[FIND-ALL]-[Service] Starting find all to Category:");
 
         List<GameCategory> result = gameCategoryRepository.findAll();
-        log.info("[FIND-ALL]-[Service] List GameCategory saved in result: [{}]", result);
 
         return result.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @Transactional
     public void move(Long categoryId, int sourceIndex, int destinationIndex) {
-        log.info("[MOVE]-[Service] Starting operation move Game in Category 1 or 2: {}, {}, {}", categoryId, sourceIndex, destinationIndex);
+        log.info("[MOVE]-[Service] Starting operation move Game in Category 1 or 2: {}, [initial: {}, destination: {}]", categoryId, sourceIndex, destinationIndex);
 
         List<GameMinProjection> category = gameRepository.searchByList(categoryId);
-        log.info("[MOVE]-[Service] List GameMinProjection saved in category: [{}]", category);
 
         GameMinProjection obj = category.remove(sourceIndex);
-        log.info("[MOVE]-[Service] Object of GameMinProjection remove first index: [{}]", obj);
 
         category.add(destinationIndex, obj);
 
         int min = Math.min(sourceIndex, destinationIndex);
         int max = Math.max(sourceIndex, destinationIndex);
-        log.info("[MOVE]-[Service] Positions min and max of Game: {}, {}", min, max);
 
         for (int i = min; i <= max; i++) {
             gameCategoryRepository.updateBelongingPosition(categoryId, category.get(i).getId(), i);
