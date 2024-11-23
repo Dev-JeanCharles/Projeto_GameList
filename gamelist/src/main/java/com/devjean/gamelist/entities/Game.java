@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Game {
     @Id

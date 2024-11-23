@@ -1,6 +1,7 @@
 package com.devjean.gamelist.application.web.handlers;
 
 import com.devjean.gamelist.application.web.commons.EntityNotFoundException;
+import com.devjean.gamelist.application.web.commons.IllegalArgumentException;
 import com.devjean.gamelist.application.web.controllers.ErrorField;
 import com.devjean.gamelist.application.web.controllers.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -40,14 +41,17 @@ public class ErrorHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException ex) {
-        log.error("No Handler Found: {}", ex.getMessage());
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
+        log.error("Illegal Argument Exception: {}", ex.getMessage());
+
+        String field = ex.getMessage().contains("sourceIndex") ? "sourceIndex" : "destinationIndex";
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "Invalid Path",
-                Collections.singletonList(new ErrorField("path", "The path '" + ex.getRequestURL() + "' is not valid."))
+                "Invalid Index",
+                Collections.singletonList(new ErrorField(field, ex.getMessage()))
         );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+
 }

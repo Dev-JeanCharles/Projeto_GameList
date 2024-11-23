@@ -1,6 +1,7 @@
 package com.devjean.gamelist.services;
 
 import com.devjean.gamelist.application.web.commons.EntityNotFoundException;
+import com.devjean.gamelist.application.web.commons.IllegalArgumentException;
 import com.devjean.gamelist.entities.GameCategory;
 import com.devjean.gamelist.application.web.dto.GameCategoryDTO;
 import com.devjean.gamelist.projections.GameMinProjection;
@@ -48,7 +49,22 @@ public class GameCategoryService {
     public void move(Long categoryId, int sourceIndex, int destinationIndex) {
         log.info("[MOVE]-[Service] Starting operation move Game in Category 1 or 2: {}, [initial: {}, destination: {}]", categoryId, sourceIndex, destinationIndex);
 
+        if (!gameCategoryRepository.existsById(categoryId)) {
+            throw new EntityNotFoundException("Category with ID " + categoryId + " not found.");
+        }
+
         List<GameMinProjection> category = gameRepository.searchByList(categoryId);
+
+        if (sourceIndex < 0 || sourceIndex >= category.size() || destinationIndex < 0 || destinationIndex > category.size()) {
+            StringBuilder errorMessage = new StringBuilder("Invalid indices:");
+            if (sourceIndex < 0 || sourceIndex >= category.size()) {
+                errorMessage.append(" sourceIndex out of bounds: ").append(sourceIndex);
+            }
+            if (destinationIndex < 0 || destinationIndex > category.size()) {
+                errorMessage.append(" destinationIndex out of bounds: ").append(destinationIndex);
+            }
+            throw new IllegalArgumentException(errorMessage.toString());
+        }
 
         GameMinProjection obj = category.remove(sourceIndex);
 

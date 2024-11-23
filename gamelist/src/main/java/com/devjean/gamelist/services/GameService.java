@@ -5,6 +5,7 @@ import com.devjean.gamelist.application.web.dto.GameDTO;
 import com.devjean.gamelist.application.web.dto.GameMinDTO;
 import com.devjean.gamelist.entities.Game;
 import com.devjean.gamelist.projections.GameMinProjection;
+import com.devjean.gamelist.repositories.GameCategoryRepository;
 import com.devjean.gamelist.repositories.GameRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,15 @@ import java.util.stream.Collectors;
 @Service
 public class GameService {
 
+    private final GameRepository repository;
+
+    private final GameCategoryRepository gameCategoryRepository;
+
     @Autowired
-    private GameRepository repository;
+    public GameService(GameRepository repository, GameCategoryRepository gameCategoryRepository) {
+        this.repository = repository;
+        this.gameCategoryRepository = gameCategoryRepository;
+    }
 
     private GameDTO convertToDTO(Game entity) {
         return new GameDTO(entity);
@@ -54,6 +62,10 @@ public class GameService {
         log.info("[FIND-ALL]-[Service] Starting find by Category: {}", categoryId);
 
         List<GameMinProjection> result = repository.searchByList(categoryId);
+
+        if (!gameCategoryRepository.existsById(categoryId)) {
+            throw new EntityNotFoundException("Category with ID: " + categoryId + " not found.");
+        }
 
         return result.stream()
                 .map(this::convertToMinDTO)

@@ -1,5 +1,6 @@
 package com.devjean.gamelist.application.web.controllers;
 
+import com.devjean.gamelist.application.web.commons.EntityNotFoundException;
 import com.devjean.gamelist.application.web.controllers.implement.MoveCategoryCommand;
 import com.devjean.gamelist.application.web.controllers.interfaces.Command;
 import com.devjean.gamelist.application.web.dto.GameCategoryDTO;
