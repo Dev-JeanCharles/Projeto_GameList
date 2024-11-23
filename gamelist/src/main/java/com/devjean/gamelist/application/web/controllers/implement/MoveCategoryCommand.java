@@ -1,6 +1,6 @@
-package com.devjean.gamelist.controllers.implement;
+package com.devjean.gamelist.application.web.controllers.implement;
 
-import com.devjean.gamelist.controllers.interfaces.Command;
+import com.devjean.gamelist.application.web.controllers.interfaces.Command;
 import com.devjean.gamelist.services.GameCategoryService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

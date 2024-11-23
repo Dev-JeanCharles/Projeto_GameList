@@ -1,7 +1,7 @@
-package com.devjean.gamelist.controllers;
+package com.devjean.gamelist.application.web.controllers;
 
-import com.devjean.gamelist.dto.GameDTO;
-import com.devjean.gamelist.dto.GameMinDTO;
+import com.devjean.gamelist.application.web.dto.GameDTO;
+import com.devjean.gamelist.application.web.dto.GameMinDTO;
 import com.devjean.gamelist.services.GameService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +24,15 @@ public class GameController {
         this.service = service;
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public GameDTO findById(@PathVariable Long id) {
         log.info("[FIND-BY-ID]-[Controller] Starting find by id to Games: [{}]", id);
-
         return service.findById(id);
     }
 
     @GetMapping
     public List<GameMinDTO> findAll() {
         log.info("[FIND-ALL]-[Controller] Starting find all to Games");
-
         return service.findAll();
     }
 }

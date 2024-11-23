@@ -1,4 +1,4 @@
-package com.devjean.gamelist.dto;
+package com.devjean.gamelist.application.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

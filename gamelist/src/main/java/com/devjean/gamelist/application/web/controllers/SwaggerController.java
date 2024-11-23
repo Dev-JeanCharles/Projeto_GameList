@@ -1,4 +1,4 @@
-package com.devjean.gamelist.controllers;
+package com.devjean.gamelist.application.web.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

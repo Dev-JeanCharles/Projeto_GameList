@@ -1,10 +1,10 @@
-package com.devjean.gamelist.controllers;
+package com.devjean.gamelist.application.web.controllers;
 
-import com.devjean.gamelist.controllers.implement.MoveCategoryCommand;
-import com.devjean.gamelist.controllers.interfaces.Command;
-import com.devjean.gamelist.dto.GameCategoryDTO;
-import com.devjean.gamelist.dto.GameMinDTO;
-import com.devjean.gamelist.dto.ReplacementDTO;
+import com.devjean.gamelist.application.web.controllers.implement.MoveCategoryCommand;
+import com.devjean.gamelist.application.web.controllers.interfaces.Command;
+import com.devjean.gamelist.application.web.dto.GameCategoryDTO;
+import com.devjean.gamelist.application.web.dto.GameMinDTO;
+import com.devjean.gamelist.application.web.dto.ReplacementDTO;
 import com.devjean.gamelist.services.GameCategoryService;
 import com.devjean.gamelist.services.GameService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,20 +28,20 @@ public class GameCategoryController {
     }
 
     @GetMapping
-    public List<GameCategoryDTO> findAll() {
+    public List<GameCategoryDTO> findAllCategories() {
         log.info("[FIND-ALL]-[Controller] Starting find all to Category");
 
-        return gameCategoryService.findAll();
+        return gameCategoryService.findAllCategories();
     }
 
-    @GetMapping(value = "/{categoryId}/games")
+    @GetMapping("/{categoryId}/games")
     public List<GameMinDTO> findByCategoryGames(@PathVariable Long categoryId) {
         log.info("[FIND-BY-CATEGORY-GAMES]-[Controller] Starting find all to Category by Games: {}", categoryId);
 
         return gameService.findByCategory(categoryId);
     }
 
-    @PostMapping(value = "/{categoryId}/replacement")
+    @PostMapping("/{categoryId}/replacement")
     public void move(@PathVariable Long categoryId, @RequestBody ReplacementDTO body) {
         log.info("[MOVE]-[Controller] Starting operation move Game in Category 1 or 2: {}", categoryId);
 

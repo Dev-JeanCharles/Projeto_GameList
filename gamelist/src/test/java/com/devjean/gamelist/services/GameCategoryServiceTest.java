@@ -1,6 +1,6 @@
 package com.devjean.gamelist.services;
 
-import com.devjean.gamelist.dto.GameCategoryDTO;
+import com.devjean.gamelist.application.web.dto.GameCategoryDTO;
 import com.devjean.gamelist.entities.GameCategory;
 import com.devjean.gamelist.utils.GameListCreator;
 import com.devjean.gamelist.repositories.GameCategoryRepository;
@@ -38,7 +38,7 @@ class GameCategoryServiceTest {
     @Test
     @DisplayName("Deve retornar uma lista de GameListDTO quando o repositório retornar uma lista de GameList")
     void deveReturnarListaDeGameDTOQuandoRepositorioRetornarUmGameList() {
-        List<GameCategoryDTO> result = gameCategoryService.findAll();
+        List<GameCategoryDTO> result = gameCategoryService.findAllCategories();
 
         assertEquals(1, result.size());
         assertEquals("Game 1", result.get(0).getName());

@@ -1,8 +1,9 @@
 package com.devjean.gamelist.services;
 
+import com.devjean.gamelist.application.web.commons.EntityNotFoundException;
+import com.devjean.gamelist.application.web.dto.GameDTO;
+import com.devjean.gamelist.application.web.dto.GameMinDTO;
 import com.devjean.gamelist.entities.Game;
-import com.devjean.gamelist.dto.GameDTO;
-import com.devjean.gamelist.dto.GameMinDTO;
 import com.devjean.gamelist.projections.GameMinProjection;
 import com.devjean.gamelist.repositories.GameRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class GameService {
     public GameDTO findById(Long id) {
         log.info("[FIND-BY-ID]-[Service] Starting find by id to Game: {}", id);
 
-        Game result = repository.findById(id).orElseThrow(() -> new RuntimeException("Game not found"));
+        Game result = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Game not found with id: " + id));
 
         return convertToDTO(result);
     }

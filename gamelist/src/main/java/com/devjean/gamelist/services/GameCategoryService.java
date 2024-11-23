@@ -1,7 +1,8 @@
 package com.devjean.gamelist.services;
 
+import com.devjean.gamelist.application.web.commons.EntityNotFoundException;
 import com.devjean.gamelist.entities.GameCategory;
-import com.devjean.gamelist.dto.GameCategoryDTO;
+import com.devjean.gamelist.application.web.dto.GameCategoryDTO;
 import com.devjean.gamelist.projections.GameMinProjection;
 import com.devjean.gamelist.repositories.GameCategoryRepository;
 import com.devjean.gamelist.repositories.GameRepository;
@@ -31,10 +32,14 @@ public class GameCategoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<GameCategoryDTO> findAll() {
+    public List<GameCategoryDTO> findAllCategories() {
         log.info("[FIND-ALL]-[Service] Starting find all to Category:");
 
         List<GameCategory> result = gameCategoryRepository.findAll();
+
+        if (result.isEmpty()) {
+            throw new EntityNotFoundException("No categories found.");
+        }
 
         return result.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
