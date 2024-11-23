@@ -23,6 +23,9 @@ public class GameService {
 
     private final GameCategoryRepository gameCategoryRepository;
 
+    private static final String CATEGORY_NOT_FOUND_MESSAGE = "Category with ID: %d not found.";
+    private static final String GAME_NOT_FOUND = "Game with ID: %d not found.";
+
     @Autowired
     public GameService(GameRepository repository, GameCategoryRepository gameCategoryRepository) {
         this.repository = repository;
@@ -41,7 +44,7 @@ public class GameService {
     public GameDTO findById(Long id) {
         log.info("[FIND-BY-ID]-[Service] Starting find by id to Game: {}", id);
 
-        Game result = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Game not found with id: " + id));
+        Game result = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format(GAME_NOT_FOUND, id)));
 
         return convertToDTO(result);
     }
@@ -61,11 +64,11 @@ public class GameService {
     public List<GameMinDTO> findByCategory(Long categoryId) {
         log.info("[FIND-ALL]-[Service] Starting find by Category: {}", categoryId);
 
-        List<GameMinProjection> result = repository.searchByList(categoryId);
-
         if (!gameCategoryRepository.existsById(categoryId)) {
-            throw new EntityNotFoundException("Category with ID: " + categoryId + " not found.");
+            throw new EntityNotFoundException(String.format(CATEGORY_NOT_FOUND_MESSAGE, categoryId));
         }
+
+        List<GameMinProjection> result = repository.searchByList(categoryId);
 
         return result.stream()
                 .map(this::convertToMinDTO)
