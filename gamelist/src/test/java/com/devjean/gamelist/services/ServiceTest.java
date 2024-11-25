@@ -84,7 +84,7 @@ class ServiceTest {
             when(gameCategoryRepository.findAll()).thenReturn(Collections.emptyList());
 
             // Act & Assert
-            EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () ->{
+            EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
                 gameCategoryService.findAllCategories();
             });
 
@@ -142,7 +142,68 @@ class ServiceTest {
             verify(gameCategoryRepository, times(1)).existsById(invalidCategoryId);
         }
 
+        @Test
+        @DisplayName("Deve retornar EntityNotFoundException quando o jogo for nulo")
+        void deveRetornarEntityNotFoundExceptionQuandoJogoNulo() {
+            // Arrange
+            Long validCategoryId = 1L;
+
+            when(gameCategoryRepository.existsById(validCategoryId)).thenReturn(true);
+            when(gameRepository.searchByList(validCategoryId)).thenReturn(null);
+
+            // Act
+            EntityNotFoundException ex = assertThrows(EntityNotFoundException.class,() -> {
+                gameCategoryService.move(validCategoryId, 0, 1);
+            });
+
+            // Assert
+            assertEquals("No games found for category with ID " + validCategoryId, ex.getMessage());
+
+            // Verify
+            verify(gameCategoryRepository, times(1)).existsById(validCategoryId);
+            verify(gameRepository, times(1)).searchByList(validCategoryId);
+        }
+
+        @Test
+        @DisplayName("Deve retornar EntityNotFoundException quando os índices são inválidos")
+        void deveRetornarIllegalArgumentExceptionQuandoIndicesInvalidos() {
+            // Arrange
+            Long validCategoryId = 2L;
+
+            // Mock de GameMinProjection
+            GameMinProjection game1 = MockFactory.createGameMinProjection(1L, "Game 1");
+            GameMinProjection game2 = MockFactory.createGameMinProjection(2L, "Game 2");
+            GameMinProjection game3 = MockFactory.createGameMinProjection(3L, "Game 3");
+
+            List<GameMinProjection> mockProjections = List.of(game1, game2, game3);
+
+            when(gameCategoryRepository.existsById(validCategoryId)).thenReturn(true);
+            when(gameRepository.searchByList(validCategoryId)).thenReturn(mockProjections);
+
+            int invalidSourceIndex = -1;
+            int invalidDestinationIndex = 5;
+
+            // Act - sourceIndex Invalido
+            IllegalArgumentException exceptionSource = assertThrows(IllegalArgumentException.class, () -> {
+                gameCategoryService.move(validCategoryId, invalidSourceIndex, 1);
+            });
+
+            // Assert - exceptionSource
+            assertTrue(exceptionSource.getMessage().contains("sourceIndex out of bounds: " + invalidSourceIndex));
+
+            IllegalArgumentException exceptionDestination = assertThrows(IllegalArgumentException.class, () -> {
+                gameCategoryService.move(validCategoryId,  0, invalidDestinationIndex);
+            });
+
+            // Assert - exceptionDestination
+            assertTrue(exceptionDestination.getMessage().contains("destinationIndex out of bounds: " + invalidDestinationIndex));
+
+            // Verify
+            verify(gameCategoryRepository, times(2)).existsById(validCategoryId);
+            verify(gameRepository, times(2)).searchByList(validCategoryId);
+        }
     }
+
     @Nested
     @DisplayName("Game Tests")
     class GameTests {
@@ -193,7 +254,7 @@ class ServiceTest {
 
         @Test
         @DisplayName("Deve retornar um GameDTO convertido quando buscar por id")
-            void deveRetornarGameDTOQuandoBuscarPorId() {
+        void deveRetornarGameDTOQuandoBuscarPorId() {
 
             // Arrange
             Long gameId = 1L;
@@ -218,7 +279,7 @@ class ServiceTest {
 
         @Test
         @DisplayName("Deve retornar EntityNotFoundException quando id do Game não existir")
-        void deveRetornarEntityNotFoundExceptionQuandoIdDoGameNaoExistir () {
+        void deveRetornarEntityNotFoundExceptionQuandoIdDoGameNaoExistir() {
             // Arrange
             Long invalidGameId = 100L;
             when(gameRepository.findById(invalidGameId)).thenReturn(Optional.empty());
@@ -237,7 +298,7 @@ class ServiceTest {
 
         @Test
         @DisplayName("Deve retornar uma Lista de GameMinDTO quando existir um categoryId")
-        void deveRetornarGameMinDTOQuandoExistirUmCategoryId () {
+        void deveRetornarGameMinDTOQuandoExistirUmCategoryId() {
             // Arrange
             Long validCategoryId = 1L;
 

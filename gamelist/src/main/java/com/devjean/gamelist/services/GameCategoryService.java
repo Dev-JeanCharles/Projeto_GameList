@@ -53,32 +53,32 @@ public class GameCategoryService {
             throw new EntityNotFoundException("Category with ID " + categoryId + " not found.");
         }
 
-        List<GameMinProjection> category = gameRepository.searchByList(categoryId);
+        List<GameMinProjection> game = gameRepository.searchByList(categoryId);
 
-        if (category == null || category.isEmpty()) {
+        if (game == null || game.isEmpty()) {
             throw new EntityNotFoundException("No games found for category with ID " + categoryId);
         }
 
-        if (sourceIndex < 0 || sourceIndex >= category.size() || destinationIndex < 0 || destinationIndex > category.size()) {
+        if (sourceIndex < 0 || sourceIndex >= game.size() || destinationIndex < 0 || destinationIndex > game.size()) {
             StringBuilder errorMessage = new StringBuilder("Invalid indices:");
-            if (sourceIndex < 0 || sourceIndex >= category.size()) {
+            if (sourceIndex < 0 || sourceIndex >= game.size()) {
                 errorMessage.append(" sourceIndex out of bounds: ").append(sourceIndex);
             }
-            if (destinationIndex < 0 || destinationIndex > category.size()) {
+            if (destinationIndex < 0 || destinationIndex > game.size()) {
                 errorMessage.append(" destinationIndex out of bounds: ").append(destinationIndex);
             }
             throw new IllegalArgumentException(errorMessage.toString());
         }
 
-        GameMinProjection obj = category.remove(sourceIndex);
+        GameMinProjection obj = game.remove(sourceIndex);
 
-        category.add(destinationIndex, obj);
+        game.add(destinationIndex, obj);
 
         int min = Math.min(sourceIndex, destinationIndex);
         int max = Math.max(sourceIndex, destinationIndex);
 
         for (int i = min; i <= max; i++) {
-            gameCategoryRepository.updateBelongingPosition(categoryId, category.get(i).getId(), i);
+            gameCategoryRepository.updateBelongingPosition(categoryId, game.get(i).getId(), i);
         }
     }
 }
