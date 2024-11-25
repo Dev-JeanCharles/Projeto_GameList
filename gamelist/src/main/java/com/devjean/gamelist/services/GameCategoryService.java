@@ -21,6 +21,9 @@ public class GameCategoryService {
 
     private final GameCategoryRepository gameCategoryRepository;
     private final GameRepository gameRepository;
+    private static final String CATEGORIES_NOT_FOUND = "No categories found.";
+    private static final String CATEGORY_ID_NOT_FOUND = "Category with ID %d not found.";
+    private static final String GAME_NOT_FOUND = "No games found for category with ID %d";
 
     @Autowired
     public GameCategoryService(GameCategoryRepository gameCategoryRepository, GameRepository gameRepository) {
@@ -39,7 +42,7 @@ public class GameCategoryService {
         List<GameCategory> result = gameCategoryRepository.findAll();
 
         if (result.isEmpty()) {
-            throw new EntityNotFoundException("No categories found.");
+            throw new EntityNotFoundException(CATEGORIES_NOT_FOUND);
         }
 
         return result.stream().map(this::convertToDTO).collect(Collectors.toList());
@@ -50,13 +53,13 @@ public class GameCategoryService {
         log.info("[MOVE]-[Service] Starting operation move Game in Category 1 or 2: {}, [initial: {}, destination: {}]", categoryId, sourceIndex, destinationIndex);
 
         if (!gameCategoryRepository.existsById(categoryId)) {
-            throw new EntityNotFoundException("Category with ID " + categoryId + " not found.");
+            throw new EntityNotFoundException(String.format(CATEGORY_ID_NOT_FOUND, categoryId));
         }
 
         List<GameMinProjection> game = gameRepository.searchByList(categoryId);
 
         if (game == null || game.isEmpty()) {
-            throw new EntityNotFoundException("No games found for category with ID " + categoryId);
+            throw new EntityNotFoundException(String.format(GAME_NOT_FOUND, categoryId));
         }
 
         if (sourceIndex < 0 || sourceIndex >= game.size() || destinationIndex < 0 || destinationIndex > game.size()) {
