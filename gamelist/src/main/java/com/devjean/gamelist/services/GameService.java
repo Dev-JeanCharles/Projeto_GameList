@@ -8,6 +8,7 @@ import com.devjean.gamelist.projections.GameMinProjection;
 import com.devjean.gamelist.repositories.GameCategoryRepository;
 import com.devjean.gamelist.repositories.GameRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,5 +74,17 @@ public class GameService {
         return result.stream()
                 .map(this::convertToMinDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public GameDTO createGame(GameDTO gameDTO) {
+        log.info("[CREATE-GAME]-[Service] Saving new game: [{}]", gameDTO);
+
+        Game game = new Game();
+        BeanUtils.copyProperties(gameDTO, game);
+
+        game = repository.save(game);
+
+        return new GameDTO(game);
     }
 }

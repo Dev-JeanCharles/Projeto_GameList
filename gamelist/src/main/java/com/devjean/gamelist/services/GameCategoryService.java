@@ -21,6 +21,7 @@ public class GameCategoryService {
 
     private final GameCategoryRepository gameCategoryRepository;
     private final GameRepository gameRepository;
+
     private static final String CATEGORIES_NOT_FOUND = "No categories found.";
     private static final String CATEGORY_ID_NOT_FOUND = "Category with ID %d not found.";
     private static final String GAME_NOT_FOUND = "No games found for category with ID %d";

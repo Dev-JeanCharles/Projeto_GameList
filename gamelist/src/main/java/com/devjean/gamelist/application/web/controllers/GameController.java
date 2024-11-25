@@ -5,10 +5,7 @@ import com.devjean.gamelist.application.web.dto.GameMinDTO;
 import com.devjean.gamelist.services.GameService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +31,11 @@ public class GameController {
     public List<GameMinDTO> findAll() {
         log.info("[FIND-ALL]-[Controller] Starting find all to Games");
         return service.findAll();
+    }
+
+    @PostMapping
+    public GameDTO createGame(@RequestBody GameDTO gameDTO) {
+        log.info("[CREATE-GAME]-[Controller] Starting to create a new game: [{}]", gameDTO);
+        return service.createGame(gameDTO);
     }
 }
