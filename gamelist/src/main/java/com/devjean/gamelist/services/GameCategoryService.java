@@ -55,6 +55,10 @@ public class GameCategoryService {
 
         List<GameMinProjection> category = gameRepository.searchByList(categoryId);
 
+        if (category == null || category.isEmpty()) {
+            throw new EntityNotFoundException("No games found for category with ID " + categoryId);
+        }
+
         if (sourceIndex < 0 || sourceIndex >= category.size() || destinationIndex < 0 || destinationIndex > category.size()) {
             StringBuilder errorMessage = new StringBuilder("Invalid indices:");
             if (sourceIndex < 0 || sourceIndex >= category.size()) {

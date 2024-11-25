@@ -7,6 +7,7 @@ import com.devjean.gamelist.application.web.dto.GameDTO;
 import com.devjean.gamelist.application.web.dto.GameMinDTO;
 import com.devjean.gamelist.entities.Game;
 import com.devjean.gamelist.entities.GameCategory;
+import com.devjean.gamelist.factory.MockFactory;
 import com.devjean.gamelist.projections.GameMinProjection;
 import com.devjean.gamelist.repositories.GameCategoryRepository;
 import com.devjean.gamelist.repositories.GameRepository;
@@ -101,25 +102,14 @@ class ServiceTest {
             Long validCategoryId = 1L;
 
             // Mock de GameMinProjection
-            GameMinProjection game1 = mock(GameMinProjection.class);
-            when(game1.getId()).thenReturn(1L);
-            when(game1.getTitle()).thenReturn("Game 1");
+            GameMinProjection game1 = MockFactory.createGameMinProjection(1L, "Game 1");
+            GameMinProjection game2 = MockFactory.createGameMinProjection(2L, "Game 2");
+            GameMinProjection game3 = MockFactory.createGameMinProjection(3L, "Game 3");
 
-            GameMinProjection game2 = mock(GameMinProjection.class);
-            when(game2.getId()).thenReturn(2L);
-            when(game2.getTitle()).thenReturn("Game 2");
-
-            GameMinProjection game3 = mock(GameMinProjection.class);
-            when(game3.getId()).thenReturn(3L);
-            when(game3.getTitle()).thenReturn("Game 3");
-
-            List<GameMinProjection> mockCategoryList = new ArrayList<>();
-            mockCategoryList.add(game1);
-            mockCategoryList.add(game2);
-            mockCategoryList.add(game3);
+            List<GameMinProjection> mockProjections = new ArrayList<>(List.of(game1, game2, game3));
 
             when(gameCategoryRepository.existsById(validCategoryId)).thenReturn(true);
-            when(gameRepository.searchByList(validCategoryId)).thenReturn(mockCategoryList);
+            when(gameRepository.searchByList(validCategoryId)).thenReturn(mockProjections);
 
             // Act
             gameCategoryService.move(validCategoryId, 0, 2);
@@ -179,22 +169,14 @@ class ServiceTest {
             Long validCategoryId = 1L;
 
             // Mock de GameMinProjection
-            GameMinProjection game1 = mock(GameMinProjection.class);
-            when(game1.getId()).thenReturn(1L);
-            when(game1.getTitle()).thenReturn("Game 1");
+            GameMinProjection game1 = MockFactory.createGameMinProjection(1L, "Game 1");
+            GameMinProjection game2 = MockFactory.createGameMinProjection(2L, "Game 2");
+            GameMinProjection game3 = MockFactory.createGameMinProjection(3L, "Game 3");
 
-            GameMinProjection game2 = mock(GameMinProjection.class);
-            when(game2.getId()).thenReturn(2L);
-            when(game2.getTitle()).thenReturn("Game 2");
-
-            GameMinProjection game3 = mock(GameMinProjection.class);
-            when(game3.getId()).thenReturn(3L);
-            when(game3.getTitle()).thenReturn("Game 3");
-
-            List<GameMinProjection> mockCategoryList = new ArrayList<>();
+            List<GameMinProjection> mockProjections = List.of(game1, game2, game3);
 
             when(gameCategoryRepository.existsById(validCategoryId)).thenReturn(true);
-            when(gameRepository.searchByList(validCategoryId)).thenReturn(mockCategoryList);
+            when(gameRepository.searchByList(validCategoryId)).thenReturn(mockProjections);
 
             // Act & Assert
             IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
@@ -247,7 +229,7 @@ class ServiceTest {
             });
 
             // Assert
-            assertEquals("Game not found with id: " + invalidGameId, ex.getMessage());
+            assertEquals("Game with ID: " + invalidGameId + " not found.", ex.getMessage());
 
             // Verify
             verify(gameRepository, times(1)).findById(invalidGameId);
@@ -260,17 +242,9 @@ class ServiceTest {
             Long validCategoryId = 1L;
 
             // Mock de GameMinProjection
-            GameMinProjection game1 = mock(GameMinProjection.class);
-            when(game1.getId()).thenReturn(1L);
-            when(game1.getTitle()).thenReturn("Game 1");
-
-            GameMinProjection game2 = mock(GameMinProjection.class);
-            when(game2.getId()).thenReturn(2L);
-            when(game2.getTitle()).thenReturn("Game 2");
-
-            GameMinProjection game3 = mock(GameMinProjection.class);
-            when(game3.getId()).thenReturn(3L);
-            when(game3.getTitle()).thenReturn("Game 3");
+            GameMinProjection game1 = MockFactory.createGameMinProjection(1L, "Game 1");
+            GameMinProjection game2 = MockFactory.createGameMinProjection(2L, "Game 2");
+            GameMinProjection game3 = MockFactory.createGameMinProjection(3L, "Game 3");
 
             List<GameMinProjection> mockProjections = List.of(game1, game2, game3);
 
