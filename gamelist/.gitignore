@@ -32,14 +32,10 @@ build/
 ### VS Code ###
 .vscode/
 
-# Ignorar arquivos de configuração locais
-application-dev.properties
+# Ignorar arquivos de dados gerados pelos volumes do Docker
+docker/.data/
 
-# Ignorar volumes e dados gerados pelo Docker
-.docker
-.data/
-pgdata/
-
-# Ignorar scripts ou logs gerados automaticamente
+# Ignorar outros arquivos temporários ou desnecessários
 *.log
-*.sql
+*.tmp
+
