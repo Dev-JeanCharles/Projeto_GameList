@@ -1,6 +1,7 @@
 package com.devjean.gamelist.utils;
 
 
+import com.devjean.gamelist.application.web.dto.GameDTO;
 import com.devjean.gamelist.entities.Game;
 import com.devjean.gamelist.entities.GameCategory;
 
@@ -21,7 +22,7 @@ public class GameListCreator {
                 .score(4.9)
                 .imgUrl("https://raw.githubusercontent.com/devsuperior/java-spring-dslist/main/resources/9.png")
                 .shortDescription("This is a game")
-                .longDescription("Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus dolorum illum placeat eligendi")
+                .longDescription("Lorem ipsum dolor sit amet consectetur adipisicing elit")
                 .build();
     }
 }

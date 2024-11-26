@@ -1,6 +1,7 @@
 package com.devjean.gamelist.application.web.dto;
 
 import com.devjean.gamelist.entities.Game;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

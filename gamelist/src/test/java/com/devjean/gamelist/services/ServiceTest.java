@@ -329,7 +329,7 @@ class ServiceTest {
 
         @Test
         @DisplayName("Deve retornar EntityNotFoundException quando a categoria não existir")
-        void deveLancarEntityNotFoundExceptionQuandoCategoriaNaoExistir() {
+        void deveRetornarEntityNotFoundExceptionQuandoCategoriaNaoExistir() {
             // Arrange
             Long invalidCategoryId = 1000L;
             when(gameCategoryRepository.existsById(invalidCategoryId)).thenReturn(false);
@@ -345,6 +345,36 @@ class ServiceTest {
             // Verify
             verify(gameCategoryRepository, times(1)).existsById(invalidCategoryId);
             verify(gameRepository, never()).searchByList(anyLong());
+        }
+
+        @Test
+        @DisplayName("Deve retornar um novo jogo quando salvar")
+        void deveRetornarUmNovoJogoQuandoSalvar () {
+            // Arrange
+            GameDTO gameDTO = MockFactory.createGameDTO(1L, "The Legend of Zelda");
+
+            Game mockGame = GameListCreator.createValidGame();
+            mockGame.setId(1L);
+
+            when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
+
+            // Act
+            GameDTO result = gameService.createGame(gameDTO);
+
+            // Assert
+            assertNotNull(result);
+            assertEquals(1L, result.getId());
+            assertEquals("Game 1", result.getTitle());
+            assertEquals(2024, result.getYear());
+            assertEquals("Esporte", result.getGenre());
+            assertEquals("XBox", result.getPlatforms());
+            assertEquals(4.9, result.getScore());
+            assertEquals("https://raw.githubusercontent.com/devsuperior/java-spring-dslist/main/resources/9.png", result.getImgUrl());
+            assertEquals("This is a game", result.getShortDescription());
+            assertEquals("Lorem ipsum dolor sit amet consectetur adipisicing elit", result.getLongDescription());
+
+            // Verify
+            verify(gameRepository, times(1)).save(any(Game.class));
         }
     }
 }
