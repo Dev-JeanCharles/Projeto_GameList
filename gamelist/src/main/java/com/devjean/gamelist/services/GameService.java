@@ -1,5 +1,6 @@
 package com.devjean.gamelist.services;
 
+import com.devjean.gamelist.application.web.commons.DuplicateTitleException;
 import com.devjean.gamelist.application.web.commons.EntityNotFoundException;
 import com.devjean.gamelist.application.web.dto.GameDTO;
 import com.devjean.gamelist.application.web.dto.GameMinDTO;
@@ -80,6 +81,11 @@ public class GameService {
     public GameDTO createGame(GameDTO gameDTO) {
         log.info("[CREATE-GAME]-[Service] Saving new game: [{}]", gameDTO);
 
+        boolean existsTitle = repository.existsByTitle(gameDTO.getTitle());
+
+        if (existsTitle) {
+            throw new DuplicateTitleException("Game with title '" + gameDTO.getTitle() + "' already exists.");
+        }
         Game game = new Game();
         BeanUtils.copyProperties(gameDTO, game);
 
