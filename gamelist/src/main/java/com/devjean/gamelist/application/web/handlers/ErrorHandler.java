@@ -1,5 +1,6 @@
 package com.devjean.gamelist.application.web.handlers;
 
+import com.devjean.gamelist.application.web.commons.DuplicateTitleException;
 import com.devjean.gamelist.application.web.commons.EntityNotFoundException;
 import com.devjean.gamelist.application.web.commons.IllegalArgumentException;
 import com.devjean.gamelist.application.web.controllers.ErrorField;
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -54,4 +54,14 @@ public class ErrorHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(DuplicateTitleException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateTitleException(DuplicateTitleException ex) {
+        log.error("Duplicate Title Exception: {}", ex.getMessage());
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                "Duplicate title",
+                Collections.singletonList(new ErrorField("title", ex.getMessage()))
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
 }
