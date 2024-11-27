@@ -14,32 +14,37 @@ import org.springframework.beans.BeanUtils;
 public class GameDTO {
     private Long id;
 
-    @NotBlank(message = "Title is mandatory and cannot be blank.")
+    @NotBlank(message = "Title cannot be blank.")
+    @Size(max = 255, message = "Title must not exceed 255 characters.")
     private String title;
 
-    @NotNull(message = "Year is mandatory.")
+    @NotNull(message = "Year cannot be null.")
+    @Min(value = 1950, message = "Year must be after 1950.")
+    @Max(value = 2100, message = "Year must be before 2100.")
     private Integer year;
 
-    @NotBlank(message = "Genre is mandatory and cannot be blank.")
+    @NotBlank(message = "Genre cannot be blank.")
+    @Size(max = 100, message = "Genre must not exceed 100 characters.")
     private String genre;
 
-    @NotBlank(message = "Platforms are mandatory and cannot be blank.")
+    @NotBlank(message = "Platforms cannot be blank.")
     private String platforms;
 
-    @NotNull(message = "Score is mandatory.")
-    @DecimalMin(value = "0.0", message = "Score must be at least 0.")
-    @DecimalMax(value = "10.0", message = "Score must be at most 10.")
+    @NotNull(message = "Score cannot be null.")
+    @DecimalMin(value = "0.0", inclusive = true, message = "Score must be at least 0.")
+    @DecimalMax(value = "10.0", inclusive = true, message = "Score must be at most 10.")
     private Double score;
 
-    @NotBlank(message = "Image URL is mandatory and cannot be blank.")
-    @Pattern(regexp = "^(https?|ftp)://[^\\s/$.?#].[^\\s]*$", message = "Invalid URL format.")
+    @NotBlank(message = "Image URL cannot be blank.")
+    @Pattern(regexp = "^(http|https)://.*$", message = "Image URL must be a valid URL.")
     private String imgUrl;
 
-    @NotBlank(message = "Short description is mandatory and cannot be blank.")
-    @Size(max = 255, message = "Short description cannot exceed 255 characters.")
+    @NotBlank(message = "Short description cannot be blank.")
+    @Size(max = 255, message = "Short description must not exceed 255 characters.")
     private String shortDescription;
 
-    @NotBlank(message = "Long description is mandatory and cannot be blank.")
+    @NotBlank(message = "Long description cannot be blank.")
+    @Size(max = 5000, message = "Long description must not exceed 5000 characters.")
     private String longDescription;
 
     public GameDTO(Game entity) {

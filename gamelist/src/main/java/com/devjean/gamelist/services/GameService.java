@@ -79,18 +79,15 @@ public class GameService {
 
     @Transactional
     public GameDTO createGame(GameDTO gameDTO) {
-        log.info("[CREATE-GAME]-[Service] Saving new game: [{}]", gameDTO);
+        log.info("[CREATE-GAME]-[Service] Validating and saving new Game: {}", gameDTO);
 
-        boolean existsTitle = repository.existsByTitle(gameDTO.getTitle());
-
-        if (existsTitle) {
+        if (repository.existsByTitle(gameDTO.getTitle())) {
             throw new DuplicateTitleException("Game with title '" + gameDTO.getTitle() + "' already exists.");
         }
-        Game game = new Game();
-        BeanUtils.copyProperties(gameDTO, game);
 
-        game = repository.save(game);
+        Game game = Game.fromDTO(gameDTO);
+        Game savedGame = repository.save(game);
 
-        return new GameDTO(game);
+        return new GameDTO(savedGame);
     }
 }

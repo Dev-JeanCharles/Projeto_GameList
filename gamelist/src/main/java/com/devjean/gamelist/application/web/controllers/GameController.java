@@ -6,7 +6,6 @@ import com.devjean.gamelist.services.GameService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(value = "/games")
-@Validated
 public class GameController {
 
     private final GameService service;
@@ -37,8 +35,9 @@ public class GameController {
     }
 
     @PostMapping
-    public GameDTO createGame(@Valid @RequestBody GameDTO gameDTO) {
-        log.info("[CREATE-GAME]-[Controller] Starting to create a new game: [{}]", gameDTO);
+    public GameDTO createGame(@RequestBody @Valid GameDTO gameDTO) {
+        log.info("[CREATE-GAME]-[Controller] Starting creation of a new game: {}", gameDTO);
         return service.createGame(gameDTO);
     }
+
 }

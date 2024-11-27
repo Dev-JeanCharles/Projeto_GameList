@@ -13,19 +13,9 @@ import lombok.*;
 public class GameMinDTO {
     @EqualsAndHashCode.Include
     private Long id;
-
-    @NotBlank(message = "Title is mandatory and cannot be blank.")
     private String title;
-
-    @NotNull(message = "Year is mandatory.")
     private Integer year;
-
-    @NotBlank(message = "Image URL is mandatory and cannot be blank.")
-    @Pattern(regexp = "^(https?|ftp)://[^\\s/$.?#].[^\\s]*$", message = "Invalid URL format.")
     private String imgUrl;
-
-    @NotBlank(message = "Short description is mandatory and cannot be blank.")
-    @Size(max = 255, message = "Short description cannot exceed 255 characters.")
     private String shortDescription;
 
     public GameMinDTO(Game entity) {

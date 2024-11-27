@@ -1,5 +1,6 @@
 package com.devjean.gamelist.entities;
 
+import com.devjean.gamelist.application.web.dto.GameDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,4 +31,17 @@ public class Game {
 
     @Column(columnDefinition = "TEXT")
     private String longDescription;
+
+    public static Game fromDTO(GameDTO gameDTO) {
+        Game game = new Game();
+        game.setTitle(gameDTO.getTitle());
+        game.setYear(gameDTO.getYear());
+        game.setGenre(gameDTO.getGenre());
+        game.setPlatforms(gameDTO.getPlatforms());
+        game.setScore(gameDTO.getScore());
+        game.setImgUrl(gameDTO.getImgUrl());
+        game.setShortDescription(gameDTO.getShortDescription());
+        game.setLongDescription(gameDTO.getLongDescription());
+        return game;
+    }
 }
