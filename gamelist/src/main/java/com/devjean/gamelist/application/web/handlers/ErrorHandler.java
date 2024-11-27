@@ -3,9 +3,11 @@ package com.devjean.gamelist.application.web.handlers;
 import com.devjean.gamelist.application.web.commons.DuplicateTitleException;
 import com.devjean.gamelist.application.web.commons.EntityNotFoundException;
 import com.devjean.gamelist.application.web.commons.IllegalArgumentException;
+import com.devjean.gamelist.application.web.commons.ResourceNotFoundException;
 import com.devjean.gamelist.application.web.controllers.ErrorField;
 import com.devjean.gamelist.application.web.controllers.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -80,5 +82,18 @@ public class ErrorHandler {
                 Collections.singletonList(new ErrorField("title", ex.getMessage()))
         );
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        log.error("Resource Not Found Exception: {}", ex.getMessage());
+
+        String field = ex.getMessage().contains("game") ? "game" : "category";
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                "Resource Not Found",
+                Collections.singletonList(new ErrorField(field, ex.getMessage()))
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 }

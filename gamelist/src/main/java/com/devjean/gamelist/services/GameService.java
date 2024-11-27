@@ -2,14 +2,17 @@ package com.devjean.gamelist.services;
 
 import com.devjean.gamelist.application.web.commons.DuplicateTitleException;
 import com.devjean.gamelist.application.web.commons.EntityNotFoundException;
+import com.devjean.gamelist.application.web.commons.ResourceNotFoundException;
 import com.devjean.gamelist.application.web.dto.GameDTO;
 import com.devjean.gamelist.application.web.dto.GameMinDTO;
+import com.devjean.gamelist.entities.Belonging;
 import com.devjean.gamelist.entities.Game;
+import com.devjean.gamelist.entities.GameCategory;
 import com.devjean.gamelist.projections.GameMinProjection;
+import com.devjean.gamelist.repositories.BelongingRepository;
 import com.devjean.gamelist.repositories.GameCategoryRepository;
 import com.devjean.gamelist.repositories.GameRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,14 +27,16 @@ public class GameService {
     private final GameRepository repository;
 
     private final GameCategoryRepository gameCategoryRepository;
+    private final BelongingRepository belongingRepository;
 
     private static final String CATEGORY_NOT_FOUND_MESSAGE = "Category with ID: %d not found.";
     private static final String GAME_NOT_FOUND = "Game with ID: %d not found.";
 
     @Autowired
-    public GameService(GameRepository repository, GameCategoryRepository gameCategoryRepository) {
+    public GameService(GameRepository repository, GameCategoryRepository gameCategoryRepository, BelongingRepository belongingRepository) {
         this.repository = repository;
         this.gameCategoryRepository = gameCategoryRepository;
+        this.belongingRepository = belongingRepository;
     }
 
     private GameDTO convertToDTO(Game entity) {
@@ -92,5 +97,24 @@ public class GameService {
         Game savedGame = repository.save(game);
 
         return new GameDTO(savedGame);
+    }
+
+    public GameDTO addGameToCategory(Long gameId, Long categoryId) {
+
+        Game game = repository.findById(gameId)
+                .orElseThrow(() -> new ResourceNotFoundException("Game not found with ID: " + gameId));
+
+        GameCategory category = gameCategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + categoryId));
+
+
+        Integer lastPosition = belongingRepository.findMaxPositionByCategory(category)
+                .orElse(0);
+
+        Belonging belonging = new Belonging(game, category, lastPosition + 1);
+
+        belongingRepository.save(belonging);
+
+        return new GameDTO(game);
     }
 }

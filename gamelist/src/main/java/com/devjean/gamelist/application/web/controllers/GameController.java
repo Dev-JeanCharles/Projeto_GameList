@@ -40,4 +40,10 @@ public class GameController {
         return service.createGame(gameDTO);
     }
 
+    @PostMapping("/{gameId}/category/{categoryId}")
+    public GameDTO addGameToCategory(@PathVariable Long gameId, @PathVariable Long categoryId) {
+        log.info("[ADD-GAME-TO-CATEGORY]-[Controller] Adding game with ID [{}] to category with ID [{}]", gameId, categoryId);
+        return  service.addGameToCategory(gameId, categoryId);
+    }
+
 }
