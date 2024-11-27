@@ -2,15 +2,14 @@ package com.devjean.gamelist.application.web.dto;
 
 import com.devjean.gamelist.entities.Game;
 import jakarta.validation.constraints.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.beans.BeanUtils;
 
-@NoArgsConstructor
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GameDTO {
     private Long id;
 

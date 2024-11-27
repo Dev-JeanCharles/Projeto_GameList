@@ -1,5 +1,6 @@
 package com.devjean.gamelist.services;
 
+import com.devjean.gamelist.application.web.commons.DuplicateTitleException;
 import com.devjean.gamelist.application.web.commons.EntityNotFoundException;
 import com.devjean.gamelist.application.web.commons.IllegalArgumentException;
 import com.devjean.gamelist.application.web.dto.GameCategoryDTO;
@@ -348,33 +349,56 @@ class ServiceTest {
         }
 
         @Test
-        @DisplayName("Deve retornar um novo jogo quando salvar")
-        void deveRetornarUmNovoJogoQuandoSalvar () {
+        @DisplayName("Deve retornar um novo jogo")
+        void deveRetornarUmNovoJogoQuandoSalvar() {
             // Arrange
-            GameDTO gameDTO = MockFactory.createGameDTO(1L, "The Legend of Zelda");
+            GameDTO validGameDTO = GameDTO.builder()
+                    .id(1L)
+                    .title("Game 1")
+                    .year(2024)
+                    .genre("Esporte")
+                    .platforms("XBox")
+                    .score(4.9)
+                    .imgUrl("https://raw.githubusercontent.com/devsuperior/java-spring-dslist/main/resources/9.png")
+                    .shortDescription("This is a game")
+                    .longDescription("Lorem ipsum dolor sit amet consectetur adipisicing elit")
+                    .build();
 
-            Game mockGame = GameListCreator.createValidGame();
-            mockGame.setId(1L);
+            // Criando uma versão de Game a partir do GameDTO (convertendo)
+            Game validGame = Game.fromDTO(validGameDTO);
 
-            when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
+            // Mockando o comportamento do repositório
+            when(gameRepository.existsByTitle(validGameDTO.getTitle())).thenReturn(false);
+            when(gameRepository.save(validGame)).thenReturn(validGame);
 
             // Act
-            GameDTO result = gameService.createGame(gameDTO);
+            GameDTO savedGameDTO = gameService.createGame(validGameDTO);
 
             // Assert
-            assertNotNull(result);
-            assertEquals(1L, result.getId());
-            assertEquals("Game 1", result.getTitle());
-            assertEquals(2024, result.getYear());
-            assertEquals("Esporte", result.getGenre());
-            assertEquals("XBox", result.getPlatforms());
-            assertEquals(4.9, result.getScore());
-            assertEquals("https://raw.githubusercontent.com/devsuperior/java-spring-dslist/main/resources/9.png", result.getImgUrl());
-            assertEquals("This is a game", result.getShortDescription());
-            assertEquals("Lorem ipsum dolor sit amet consectetur adipisicing elit", result.getLongDescription());
+            assertNotNull(savedGameDTO);
+            assertEquals(validGameDTO.getTitle(), savedGameDTO.getTitle());
+            assertEquals(validGameDTO.getYear(), savedGameDTO.getYear());
+            verify(gameRepository, times(1)).save(validGame);
+        }
+
+        @Test
+        @DisplayName("Deve retornar DuplicateTitleException quando o titulo estiver duplicado")
+        void deveRetornarDuplicateTitleExceptionQuandoTituloDuplicado () {
+            // Arrange
+            GameDTO gameDTO = new GameDTO();
+            gameDTO.setTitle("Game with duplicate title");
+
+            when(gameRepository.existsByTitle(gameDTO.getTitle())).thenReturn(true);
+
+            // Act & Assert
+            DuplicateTitleException exception = assertThrows(DuplicateTitleException.class, () -> {
+               gameService.createGame(gameDTO);
+            });
+
+            assertEquals("Game with title 'Game with duplicate title' already exists.", exception.getMessage());
 
             // Verify
-            verify(gameRepository, times(1)).save(any(Game.class));
+            verify(gameRepository, never()).save(any(Game.class));
         }
     }
 }

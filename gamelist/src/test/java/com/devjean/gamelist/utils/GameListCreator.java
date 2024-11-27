@@ -1,7 +1,6 @@
 package com.devjean.gamelist.utils;
 
 
-import com.devjean.gamelist.application.web.dto.GameDTO;
 import com.devjean.gamelist.entities.Game;
 import com.devjean.gamelist.entities.GameCategory;
 

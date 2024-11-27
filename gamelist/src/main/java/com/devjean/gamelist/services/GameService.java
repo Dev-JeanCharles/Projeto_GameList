@@ -81,7 +81,10 @@ public class GameService {
     public GameDTO createGame(GameDTO gameDTO) {
         log.info("[CREATE-GAME]-[Service] Validating and saving new Game: {}", gameDTO);
 
+        log.info("[CREATE-GAME]-[Service] Checking if title exists: {}", gameDTO.getTitle());
         if (repository.existsByTitle(gameDTO.getTitle())) {
+            log.error("Duplicate title found: {}", gameDTO.getTitle());
+
             throw new DuplicateTitleException("Game with title '" + gameDTO.getTitle() + "' already exists.");
         }
 
