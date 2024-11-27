@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -84,15 +85,22 @@ public class ErrorHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
+    //TODO: Resolve problem of Game and Category not found
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
         log.error("Resource Not Found Exception: {}", ex.getMessage());
 
-        String field = ex.getMessage().contains("game") ? "game" : "category";
+        List<ErrorField> errorFields = new ArrayList<>();
+        if (ex.getMessage().contains("Game")) {
+            errorFields.add(new ErrorField("game", ex.getMessage()));
+        }
+        if (ex.getMessage().contains("Category")) {
+            errorFields.add(new ErrorField("category", ex.getMessage()));
+        }
 
         ErrorResponse errorResponse = new ErrorResponse(
                 "Resource Not Found",
-                Collections.singletonList(new ErrorField(field, ex.getMessage()))
+                errorFields
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }

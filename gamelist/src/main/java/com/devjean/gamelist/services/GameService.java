@@ -100,21 +100,19 @@ public class GameService {
     }
 
     public GameDTO addGameToCategory(Long gameId, Long categoryId) {
-
         Game game = repository.findById(gameId)
                 .orElseThrow(() -> new ResourceNotFoundException("Game not found with ID: " + gameId));
 
         GameCategory category = gameCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + categoryId));
 
-
         Integer lastPosition = belongingRepository.findMaxPositionByCategory(category)
                 .orElse(0);
 
         Belonging belonging = new Belonging(game, category, lastPosition + 1);
-
         belongingRepository.save(belonging);
 
         return new GameDTO(game);
     }
+
 }
